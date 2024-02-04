@@ -37,7 +37,7 @@ referencje = list(maszyna.findall('{http://www.plmxml.org/Schemas/PLMXMLSchema}P
 # jadziem z iteracją po listach iiihaaa, patataj, patataj
 for i in referencje: 
     # i to złorzenie z nazwą i listą skladowych
-    asm_id = i.attrib["id"]
+    asm_id = i.attrib["id"] 
     if asm_id == "thisAsm":
         mach_name = i.attrib["name"].split("_")
     asm_name = i.attrib["name"]
