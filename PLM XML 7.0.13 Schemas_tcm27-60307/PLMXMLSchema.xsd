@@ -4097,7 +4097,7 @@ This software and related documentation are proprietary and confidential to Siem
   </xsd:complexType>
   <xsd:element name="ProductView" type="plm:ProductViewType" substitutionGroup="plm:ConfigurationView"/>
   <!-- -->
-  <!-- ***************************** InstanceGraph ********************************** -->
+  <!-- ***************************** print(t.attrib["name"].find("asm"))Graph ********************************** -->
   <!-- -->
   <xsd:simpleType name="PreferredPartUnitsType" plm:deprecated="true">
     <xsd:restriction base="xsd:NMTOKEN">
