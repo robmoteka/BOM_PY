@@ -1,26 +1,35 @@
 
 
-def znajdzAsm(nrId):
-    for i in referencje:
-        if i.attrib['id'] == nrId:
-            r_name = i.attrib['name']
-            is_asm = 0 if i.attrib["type"] == "solid" else 1
-            if is_asm == 0:
-                return(r_name, is_asm)
-            else:
-                 r_list = list(i.attrib["instanceRefs"].split(" ")) #lista składowych
-                 for m in r_list
+# def znajdzAsm(nrId):
+#     for i in referencje:
+#         if i.attrib['id'] == nrId:
+#             r_name = i.attrib['name']
+#             is_asm = 0 if i.attrib["type"] == "solid" else 1
+#             if is_asm == 0:
+#                 return(r_name, is_asm)
+#             else:
+#                  r_list = list(i.attrib["instanceRefs"].split(" ")) #lista składowych
+#                  for m in r_list
 
 
-mach_name = 
+# mach_name = 
 
-for i in skladowe:
-    if i.attrib["id"] == "thisAsm":
-        mach_name = i.attrib["name"]
-        split_mach_name = mach_name.split("_")
-        el_list = list(i.attrib["instanceRefs"].split(" ")) #tą listę
-    for t in el_list:
-            
+# for i in skladowe:
+#     if i.attrib["id"] == "thisAsm":
+#         mach_name = i.attrib["name"]
+#         split_mach_name = mach_name.split("_")
+#         el_list = list(i.attrib["instanceRefs"].split(" ")) #tą listę
+#     for t in el_list:
+        <Occurrence id="id45" name="036P_02.02.00.001_Profil_80x80x4_5100.par:1"
+                instanceRefs="#id4 #id11 #id17 #id43" visible="true">     
+        
+<Occurrence id="id13" name="036P_02.00.00.000_Modul_lancuchowy_staly.asm:1"
+                instanceRefs="#id4 #id11"
+                occurrenceRefs=
+        "id19 id871 id1042 id1045 id1082 id1114 id1120 id1493 id1496 id1499 id1549 id1596 id1599 id1602 id1605 id1648 id1680 id1683 id1691 id1699 id1702 id1705 id1708 id1711 id1714 id1717 id1720 id1723 id1731 id1739 id1742 id1745 id1748 id1751 id1754 id1757 id1760 id1763 id1771 id1779 id1782 id1785 id1788 id1791 id1794 id1797 id1800 id1803 id1811 id1819 id1822 id1825 id1828 id1831 id1834 id1837 id1840 id2227 id2273 id2307 id2310 id2313 id2316 id2319 id2322 id2325 id2378 id2428 id2431 id2434 id2437 id2469 id2472 id2475 id2478 id2549 id2585 id2588 id2591 id2760 id2763 id2795 id2798 id2865 id2868 id2871 id3027 id3030 id3033 id3036 id3039 id3042 id3045 id3048 id3051 id3054 id3057 id3060 id3063 id3066 id3069 id3072 id3075 id3078 id3081 id3084 id3087 id3090 id3093 id3096 id3099 id3102 id3105 id3108 id3111 id3114 id3117 id3200 id3203 id3206 id3209 id3212 id3215 id3218 id3221 id3224 id3227 id3230 id3233 id3236 id3239 id3242 id3245 id3248 id3251 id3254 id3257 id3260 id3263 id3266 id3269 id3272 id3275 id3278 id3281 id3284 id3287 id3290 id3293 id3376 id3379 id3382 id3385 id3388 id3391 id3394 id3397 id3400 id3403 id3406 id3409 id3412 id3415 id3418 id3421 id3424 id3427 id3430 id3433 id3436 id3439 id3442 id3445 id3448 id3451 id3454 id3457 id3460 id3463 id3466 id3469 id3552 id3555 id3558 id3561 id3564 id3567 id3570 id3573 id3576 id3579 id3582 id3585 id3588 id3591 id3594 id3597 id3600 id3603 id3606 id3609 id3612 id3615 id3618 id3621 id3624 id3627 id3630 id3633 id3636 id3639 id3642 id3645 id3728 id3731 id3734 id3737 id3740 id3743 id3746 id3749 id3752 id3755 id3758 id3761 id3764 id3767 id3770 id3773 id3776 id3779 id3782 id3785 id3788 id3791 id3794 id3797 id3800 id3803 id3806 id3809 id3812 id3815 id3818 id3821 id3904 id3907 id3910 id3913 id3916 id3919 id3922 id3925 id3928 id3931 id3934 id3937 id3940 id3943 id3946 id3949 id3952 id3955 id3958 id3961 id3964 id3967 id3970 id3973 id3976 id3979 id3982 id3985 id3988 id3991 id3994 id3997 id4080 id4083"
+                visible="true"></Occurrence>
+        
+        
         
         
         #is_asm = 0 if i.attrib["type"] == "solid" else 
