@@ -22,7 +22,7 @@ asm_rows = []
 
 #fname - trzeba to sparametryzować
 fname = "032P_00.00.00.000_Przenosnik_rolkowo_lancuchowy.plmxml"
-# xmlparse - cała struktura
+# xmlparse - cała struktura s
 xmlparse = Xet.parse(fname)
 # po diabła ten root?
 root = xmlparse.getroot()
