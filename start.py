@@ -52,6 +52,8 @@ occ..R zawiera wszystkie składowe
 
 maszyna = pdef.attrib["name"]
 mach_id = maszyna.split("_")[0]
+
+################# PO OCCURENSACH ###########################
 ile = 0
 for i in occurence:
     if ("visible" in i.attrib) or not("name" in i.attrib): # żeby nie sypało błędami jakby z jakiegoś powodu nie było ustawione
@@ -80,12 +82,29 @@ print("Przebadano: " + str(ile) + " rekordów.")
 print("Zapisano: " + str(len(asm_rows)) + " części zadeklarowanych w złożeniach.")
 print("Zapisano: " + str(len(par_rows)) + " części.")
 
+######## PO INSTANCJACH I PRV ######################
+"""<ProductDef> - maszyna 
+-<InstanceGraph> - zbiorczy  
+--<Instance/> - powołanie (par i asm)  
+--<ProductRevisionView/> - wywołanie assembly z listą składowych w instanceRefs (lista)
+-</InstanceGraph>
+-<ProductRevisionView/> - solidy definicje
+instancje = list(igraf.findall('{http://www.plmxml.org/Schemas/PLMXMLSchema}Instance'))
+assemblies = list(igraf.findall('{http://www.plmxml.org/Schemas/PLMXMLSchema}ProductRevisionView'))
+solidy 
+"""
+inst_col = []
+inst_rows = []
+for p in instancje:
+    is_asm = 0 if i.attrib["type"] == "solid" else 1
+    
+
 
 asm_f = pd.DataFrame(asm_rows, columns=asm_cols, index=None)
-asmg_f = asm_f.groupby(['asm_id'])
-asmg_f.to_csv(fname + '_asm.csv')
+#asmg_f = asm_f.groupby(['asm_id'])
+asm_f.to_csv("occur_asm_" + fname + '_asm.csv')
 par_f = pd.DataFrame(par_rows, columns=par_cols, index=None)
-par_f.to_csv(fname + '_par.csv')
+par_f.to_csv("occur_par_" + fname + '_par.csv')
 
 df1 = asm_f.merge(par_f, left_on="par_id", right_on="id")
 df1.to_csv(fname + '_mrg.csv')
