@@ -4,7 +4,6 @@ import pandas as pd
 
 
 """ asm_ to tabela złorzeń brana z Occurence
-
 """
 asm_cols = ["mach_id", "asm_id", "asm_name", "par_id", "ile"]
 asm_rows = []
@@ -83,7 +82,7 @@ print("Zapisano: " + str(len(par_rows)) + " części.")
 
 
 asm_f = pd.DataFrame(asm_rows, columns=asm_cols, index=None)
-asmg_f = asm_f.groupby(['asm_id'])['ile'].count()
+asmg_f = asm_f.groupby(['asm_id'])
 asmg_f.to_csv(fname + '_asm.csv')
 par_f = pd.DataFrame(par_rows, columns=par_cols, index=None)
 par_f.to_csv(fname + '_par.csv')
