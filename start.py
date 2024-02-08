@@ -38,8 +38,8 @@ pview = xmlparse.find('{http://www.plmxml.org/Schemas/PLMXMLSchema}ProductDef/{h
 
 # przyporządkowanie struktur do list obiektów 
 instancje = list(igraf.findall('{http://www.plmxml.org/Schemas/PLMXMLSchema}Instance'))
-assemblies = list(igraf.findall('{http://www.plmxml.org/Schemas/PLMXMLSchema}ProductRevisionView'))
-solidy = list(pdef.findall('{http://www.plmxml.org/Schemas/PLMXMLSchema}ProductRevisionView'))
+rewizje_igraf = list(igraf.findall('{http://www.plmxml.org/Schemas/PLMXMLSchema}ProductRevisionView'))
+rewizje_pdef = list(pdef.findall('{http://www.plmxml.org/Schemas/PLMXMLSchema}ProductRevisionView'))
 occurence = list(pview.findall('{http://www.plmxml.org/Schemas/PLMXMLSchema}Occurrence'))
 struktura = []
 
@@ -64,14 +64,12 @@ for i in occurence:
                 refs_list = list(i.attrib["occurrenceRefs"].split(" ")) #tymczasowa lista childrenów                
                 if ("name" in i.attrib): #przypisanie nazwy zlozenia jeżeli ma name
                    asm_name = i.attrib["name"].rsplit('.',1)[0] #czyszczenie rozszerzenia pliku i nr wystąpienia - .asm: 4
-                   print(asm_name)
                 else: #przypisanie nazwy zlozenia (id maszyny) dla root-a
                    asm_name = maszyna
-                   print(asm_name)
                 # iteracja po liście składowych 
                 # id to nr składowej                
                 for p in refs_list: #asm_cols =  ["par_id", "mach_id", "asm_id", "asm_name", "par_name" ]
-                    asm_rows.append({"par_id": p , "mach_id": mach_id, "asm_id": id, "asm_name": asm_name})
+                    asm_rows.append({"par_id": p , "mach_id": mach_id, "asm_id": id, "asm_name": asm_name, "ile": 1})
 
             ################# ANALIZA ELEMENTÓW #######################
             else: # nie jest zlozeniem
@@ -82,7 +80,7 @@ print("Przebadano: " + str(ile) + " rekordów.")
 print("Zapisano: " + str(len(asm_rows)) + " części zadeklarowanych w złożeniach.")
 print("Zapisano: " + str(len(par_rows)) + " części.")
 
-######## PO INSTANCJACH I PRV ######################
+######## PO INSTANCJACH ######################
 """<ProductDef> - maszyna 
 -<InstanceGraph> - zbiorczy  
 --<Instance/> - powołanie (par i asm)  
@@ -90,21 +88,33 @@ print("Zapisano: " + str(len(par_rows)) + " części.")
 -</InstanceGraph>
 -<ProductRevisionView/> - solidy definicje
 instancje = list(igraf.findall('{http://www.plmxml.org/Schemas/PLMXMLSchema}Instance'))
-assemblies = list(igraf.findall('{http://www.plmxml.org/Schemas/PLMXMLSchema}ProductRevisionView'))
-solidy 
+rewizje_igraf = list(igraf.findall('{http://www.plmxml.org/Schemas/PLMXMLSchema}ProductRevisionView'))
+rewizje_pdef = list(pdef.findall('{http://www.plmxml.org/Schemas/PLMXMLSchema}ProductRevisionView'))
 """
-inst_col = []
-inst_rows = []
-for p in instancje:
-    is_asm = 0 if i.attrib["type"] == "solid" else 1
-    
+rew_col = ["machine", "name", "is_asm"]
+rew_rows = []
+for p in rewizje_pdef:
+    is_asm = 0 if p.attrib["type"] == "solid" else 1
+    name = p.attrib["name"]
+    rew_rows.append({"machine": mach_id, "name": name, "is_asm": is_asm})
+for rg in rewizje_igraf:
+    is_asm = 0 if rg.attrib["type"] == "solid" else 1
+    name = rg.attrib["name"]
+    rew_rows.append({"machine": mach_id, "name": name, "is_asm": is_asm})
 
 
+
+rew_f = pd.DataFrame(rew_rows, columns=rew_col, index=None)
 asm_f = pd.DataFrame(asm_rows, columns=asm_cols, index=None)
-#asmg_f = asm_f.groupby(['asm_id'])
-asm_f.to_csv("occur_asm_" + fname + '_asm.csv')
 par_f = pd.DataFrame(par_rows, columns=par_cols, index=None)
-par_f.to_csv("occur_par_" + fname + '_par.csv')
+#df.set_index('key').join(other.set_index('key'))
+#mrg_f = asm_f.merge(par_f, left_on="par_id", right_on="id")
+# mrg_f = asm_f.set_index('par_id').join(par_f.set_index('id'))
+#mrg_f = asm_f.join(asm_f.set_index('par_id'), on=)
+mrg_f = asm_f.join(par_f.set_index('id'), on='par_id')
 
-df1 = asm_f.merge(par_f, left_on="par_id", right_on="id")
-df1.to_csv(fname + '_mrg.csv')
+
+rew_f.to_csv(mach_id + "_biblioteka.csv")
+asm_f.to_csv(mach_id + '_asm.csv')
+par_f.to_csv(mach_id + '_par.csv')
+mrg_f.to_csv(mach_id + '_asm+par_mrg.csv')
