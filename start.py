@@ -1,6 +1,7 @@
 import xml.etree.ElementTree as Xet 
 import pyarrow as pa
 import pandas as pd 
+from IPython.display import display
 
 
 """ asm_ to tabela złorzeń brana z Occurence
@@ -104,17 +105,16 @@ for rg in rewizje_igraf:
 
 
 
-rew_f = pd.DataFrame(rew_rows, columns=rew_col, index=None)
+rew_f = pd.DataFrame(rew_rows, columns=rew_col, index=None).drop_duplicates()
 asm_f = pd.DataFrame(asm_rows, columns=asm_cols, index=None)
 par_f = pd.DataFrame(par_rows, columns=par_cols, index=None)
-#df.set_index('key').join(other.set_index('key'))
-#mrg_f = asm_f.merge(par_f, left_on="par_id", right_on="id")
-# mrg_f = asm_f.set_index('par_id').join(par_f.set_index('id'))
-#mrg_f = asm_f.join(asm_f.set_index('par_id'), on=)
 mrg_f = asm_f.join(par_f.set_index('id'), on='par_id')
+asm_f_uq = asm_f.drop_duplicates(subset=['asm_id']).rename(columns={"asm_name": "name"})
 
+#tutaj co robię strasznie na około ale nie chciał mi się join robić
+asm_f_uqu = asm_f_uq[["asm_id", "name"]]
+mrg_f_full = mrg_f.join(asm_f_uqu.set_index('asm_id'), on='par_id', lsuffix='_x', rsuffix='_y') 
 
 rew_f.to_csv(mach_id + "_biblioteka.csv")
-asm_f.to_csv(mach_id + '_asm.csv')
-par_f.to_csv(mach_id + '_par.csv')
-mrg_f.to_csv(mach_id + '_asm+par_mrg.csv')
+asm_f_uq.to_csv(mach_id + '_asm_uq.csv')
+mrg_f_full.to_csv(mach_id + '_asm+par_mrg_asm.csv')
