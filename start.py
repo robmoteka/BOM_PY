@@ -1,6 +1,7 @@
 import xml.etree.ElementTree as Xet 
 import pyarrow as pa
 import pandas as pd 
+import csv
 from IPython.display import display
 
 
@@ -104,17 +105,42 @@ for rg in rewizje_igraf:
     rew_rows.append({"machine": mach_id, "name": name, "is_asm": is_asm})
 
 
+#ogarnianie dataframe 
 
-rew_f = pd.DataFrame(rew_rows, columns=rew_col, index=None).drop_duplicates()
-asm_f = pd.DataFrame(asm_rows, columns=asm_cols, index=None)
-par_f = pd.DataFrame(par_rows, columns=par_cols, index=None)
-mrg_f = asm_f.join(par_f.set_index('id'), on='par_id')
-asm_f_uq = asm_f.drop_duplicates(subset=['asm_id']).rename(columns={"asm_name": "name"})
+# biblioteka -  pojedyncze wystąpienia asm i par
+# index, machine, name, is_asm
+biblioteka_df = pd.DataFrame(rew_rows, columns=rew_col, index=None).drop_duplicates()
+
+# assemblies - lista z powtórzeniami
+# asm_id to id nadtrzędnego zlożenia
+# par_id to id rekordu
+# index, mach_id, asm_id, asm_name, par_id, ile
+asm_df = pd.DataFrame(asm_rows, columns=asm_cols, index=None) 
+
+# parts - lista części z powtórzeniami
+# index, id, name
+par_df = pd.DataFrame(par_rows, columns=par_cols, index=None) 
+
+# asm2par_df to przeróbka asm_df do zgodności z par_df
+# następnie łącze je razem w jedną tabelę par_asm_df
+asm2par_df = asm_df[['asm_id', 'asm_name']].rename(columns={'asm_id': 'id', 'asm_name': 'name'}).drop_duplicates(subset=['id'])
+par_asm_df = pd.concat([asm2par_df, par_df])
+
+#paruję asm_df z par_df  
+join_df = asm_df.join(par_asm_df.set_index('id'), on='par_id').rename(columns={'mach_id': 'maszyna', 'asm_name': 'zespol', 'par_name': 'name', 'ile': 'ilosc'})
+#asm_f_uq = asm_df.drop_duplicates(subset=['asm_id'])
 
 #tutaj co robię strasznie na około ale nie chciał mi się join robić
-asm_f_uqu = asm_f_uq[["asm_id", "name"]]
-mrg_f_full = mrg_f.join(asm_f_uqu.set_index('asm_id'), on='par_id', lsuffix='_x', rsuffix='_y') 
+#asm_f_uqu = asm_f_uq[["par_id", "asm_name"]].
+display(join_df)
 
-rew_f.to_csv(mach_id + "_biblioteka.csv")
-asm_f_uq.to_csv(mach_id + '_asm_uq.csv')
-mrg_f_full.to_csv(mach_id + '_asm+par_mrg_asm.csv')
+
+biblioteka_df.to_csv(mach_id + "_biblioteka.csv")
+#asm_df.to_csv(mach_id + '_asm_df.csv')
+#par_df.to_csv(mach_id + '_par_df.csv')
+#asm2par_df.to_csv(mach_id + '_asm2par_df.csv')
+#par_asm_df.to_csv(mach_id + '_par_asm_df.csv')
+join_df.to_csv(mach_id + '_BOM.csv', index=False, quotechar='"',
+                       quoting=csv.QUOTE_NONNUMERIC)
+
+#mrg_f_full.to_csv(mach_id + '_asm+par_mrg_asm.csv')
