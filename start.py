@@ -58,24 +58,24 @@ mach_id = maszyna.split("_")[0]
 ################# PO OCCURENSACH ###########################
 ile = 0
 for i in occurence:
-    if ("visible" in i.attrib) or not("name" in i.attrib): # żeby nie sypało błędami jakby z jakiegoś powodu nie było ustawione
-        if not("visible" in i.attrib) or i.attrib["visible"] != "false"    : #jest widoczny (jak nie to olewam go)
-            id = i.attrib["id"] # id rozpatrywanego elementu
-            ################# ANALIZA ZŁOŻENIA #######################
-            if ("occurrenceRefs" in i.attrib): # jest zlożeniem                
-                refs_list = list(i.attrib["occurrenceRefs"].split(" ")) #tymczasowa lista childrenów                
-                if ("name" in i.attrib): #przypisanie nazwy zlozenia jeżeli ma name
-                   asm_name = i.attrib["name"].rsplit('.',1)[0] #czyszczenie rozszerzenia pliku i nr wystąpienia - .asm: 4
-                else: #przypisanie nazwy zlozenia (id maszyny) dla root-a
-                   asm_name = maszyna
-                # iteracja po liście składowych 
-                # id to nr składowej                
-                for p in refs_list: #asm_cols =  ["par_id", "mach_id", "asm_id", "asm_name", "par_name" ]
-                    asm_rows.append({"par_id": p , "mach_id": mach_id, "asm_id": id, "asm_name": asm_name, "ile": 1})
+    #if ("visible" in i.attrib) or not("name" in i.attrib): # żeby nie sypało błędami jakby z jakiegoś powodu nie było ustawione
+        #if not("visible" in i.attrib) or i.attrib["visible"] != "false"    : #jest widoczny (jak nie to olewam go)
+    id = i.attrib["id"] # id rozpatrywanego elementu
+    ################# ANALIZA ZŁOŻENIA #######################
+    if ("occurrenceRefs" in i.attrib): # jest zlożeniem                
+        refs_list = list(i.attrib["occurrenceRefs"].split(" ")) #tymczasowa lista childrenów                
+        if ("name" in i.attrib): #przypisanie nazwy zlozenia jeżeli ma name
+            asm_name = i.attrib["name"].rsplit('.',1)[0] #czyszczenie rozszerzenia pliku i nr wystąpienia - .asm: 4
+        else: #przypisanie nazwy zlozenia (id maszyny) dla root-a
+            asm_name = maszyna
+        # iteracja po liście składowych 
+        # id to nr składowej                
+        for p in refs_list: #asm_cols =  ["par_id", "mach_id", "asm_id", "asm_name", "par_name" ]
+            asm_rows.append({"par_id": p , "mach_id": mach_id, "asm_id": id, "asm_name": asm_name, "ile": 1})
 
-            ################# ANALIZA ELEMENTÓW #######################
-            else: # nie jest zlozeniem
-                par_rows.append({"id": id ,"name": i.attrib["name"].rsplit('.',1)[0]})
+    ################# ANALIZA ELEMENTÓW #######################
+    else: # nie jest zlozeniem
+        par_rows.append({"id": id ,"name": i.attrib["name"].rsplit('.',1)[0]})
 
     ile = ile + 1
 print("Przebadano: " + str(ile) + " rekordów.")
@@ -105,7 +105,6 @@ for rg in rewizje_igraf:
     rew_rows.append({"machine": mach_id, "name": name, "is_asm": is_asm})
 
 
-#ogarnianie dataframe 
 
 # biblioteka -  pojedyncze wystąpienia asm i par
 # index, machine, name, is_asm
