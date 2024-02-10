@@ -127,6 +127,8 @@ par_asm_df = pd.concat([asm2par_df, par_df])
 
 #paruję asm_df z par_df  
 join_df = asm_df.join(par_asm_df.set_index('id'), on='par_id').rename(columns={'mach_id': 'maszyna', 'asm_name': 'zespol', 'par_name': 'name', 'ile': 'ilosc'})
+join_df['zespol'] = join_df['zespol'] + '_' + join_df['asm_id']
+join_df['biblioteka'] = join_df['name']
 #asm_f_uq = asm_df.drop_duplicates(subset=['asm_id'])
 
 #tutaj co robię strasznie na około ale nie chciał mi się join robić
@@ -143,3 +145,6 @@ join_df.to_csv(mach_id + '_BOM.csv', index=False, quotechar='"',
                        quoting=csv.QUOTE_NONNUMERIC)
 
 #mrg_f_full.to_csv(mach_id + '_asm+par_mrg_asm.csv')
+
+
+
