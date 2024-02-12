@@ -27,7 +27,7 @@ par_rows = []
 <ProductDef/>
 """
 #fname - trzeba to sparametryzować
-fname = "032P_00.00.00.000_Przenosnik_rolkowo_lancuchowy.plmxml"
+fname = "036P_00.00.00.000_Przenosnik_lancuchowy.plmxml"
 # xmlparse - cała struktura
 xmlparse = Xet.parse(fname)
 # po diabła ten root?
